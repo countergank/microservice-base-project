@@ -1,0 +1,25 @@
+services:
+  # aplicacion de NestJS
+  microservice-name:
+    container_name: microservice-name
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      target: development
+    volumes:
+      - .:/usr/src/app
+    # Run a command against the development stage of the image
+    command: npm run start:debug
+    env_file: .env.${NODE_ENV}
+    ports:
+      - ${PORT}:${PORT}
+      - ${DOCS_PORT}:${DOCS_PORT}
+    tty: true
+    networks:
+      - microservice-name-net
+
+networks:
+  microservice-name-net:
+    name: microservice-name-net
+    driver: bridge
