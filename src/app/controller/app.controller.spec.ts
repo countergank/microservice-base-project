@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VersionRespDTO } from '../dto/version-resp.dto';
 import { AppVersionNotFoundError } from '../errors/app-version-not-found.error';
 import { VersionReqDTOMock } from '../mocks/version-req.dto.mock';
+import { VersionMock } from '../mocks/version.mock';
 import { AppService } from '../service/app.service';
 import { AppController } from './app.controller';
 
@@ -29,7 +30,7 @@ describe(AppController.name, () => {
     const versionReqDTOMock = new VersionReqDTOMock();
 
     it('should return API version', async () => {
-      jest.spyOn(appService, 'getVersion');
+      jest.spyOn(appService, 'getVersion').mockResolvedValue(new VersionMock());
       await expect(controller.getVersion(versionReqDTOMock)).resolves.toBeInstanceOf(VersionRespDTO);
     });
 
