@@ -8,7 +8,5 @@ export class VersionReqDTOMock extends VersionReqDTO {
         version: versionStructure('Microservice', 'local', '1.0.0'),
       },
     });
-
-    return this;
   }
 }

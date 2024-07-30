@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -25,19 +25,9 @@ async function bootstrap() {
     },
   });
 
-  const asyncApiOptions = new AsyncApiDocumentBuilder()
-    .setTitle(name)
-    .setDescription(description)
-    .setVersion(version)
-    .setDefaultContentType('application/json')
-    .addServer(name, {
-      url: `http://${host}:${docsPort}`,
-      protocol: protocol,
-    })
-    .build();
-
-  const asyncapiDocument = await AsyncApiModule.createDocument(app, asyncApiOptions);
-  await AsyncApiModule.setup('/docs', app, asyncapiDocument);
+  const config = new DocumentBuilder().setTitle(name).setDescription(description).setVersion(version).build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   await app.startAllMicroservices();
   await app.listen(docsPort, host);

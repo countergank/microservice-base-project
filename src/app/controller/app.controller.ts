@@ -1,9 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, RpcException } from '@nestjs/microservices';
-import { AsyncApiPub } from 'nestjs-asyncapi';
 import { EventPatternsMS } from '../../common/enums/event-patternts-ms.enum';
 import { CustomLogger } from '../../common/logger';
-import { VersionReqDoc, VersionRespDoc } from '../api-docs/app.decorator';
+import { VersionDoc } from '../api-docs/app.decorator';
 import { VersionReqDTO } from '../dto/version-req.dto';
 import { VersionRespDTO } from '../dto/version-resp.dto';
 import { AppVersionNotFoundError } from '../errors/app-version-not-found.error';
@@ -14,7 +13,7 @@ export class AppController {
   private readonly logger = new CustomLogger(AppController.name);
   constructor(private readonly appService: AppService) {}
 
-  @AsyncApiPub(VersionReqDoc(), VersionRespDoc())
+  @VersionDoc()
   @MessagePattern(EventPatternsMS.Version)
   async getVersion(versionReqDTO: VersionReqDTO): Promise<VersionRespDTO> {
     try {
